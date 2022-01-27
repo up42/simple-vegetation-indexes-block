@@ -8,8 +8,9 @@ computes various vegetation indexes:
  * [NDVI](https://en.wikipedia.org/wiki/Normalized_difference_vegetation_index) - Normalized Difference Vegetation Index
  * [EVI](https://en.wikipedia.org/wiki/Enhanced_vegetation_index) -
    Enhanced Vegetation Index
- * [EVI2](https://www.indexdatabase.de/db/si-single.php?sensor_id=96&rsindex_id=237)
-   - Enhanced Vegetation Index 2
+ *
+ [EVI2](https://www.indexdatabase.de/db/si-single.php?sensor_id=96&rsindex_id=237) -
+ Enhanced Vegetation Index 2
  * [EVI2-2](https://www.indexdatabase.de/db/i-single.php?id=576) -
    Enhanced Vegetation Index 2 - 2
  * [SAVI](https://en.wikipedia.org/wiki/Soil-adjusted_vegetation_index) - Soil-Adjusted Vegetation Index
@@ -22,7 +23,7 @@ The calculation is done using the [OrfeoToolbox
    utility.
 
 Writen in C++, the
-["OrfeoToolbox"](https://www.orfeo-toolbox.org/) (OTB) is maintained
+[OrfeoToolbox](https://www.orfeo-toolbox.org/) (OTB) is maintained
 by the French Space Agency &mdash; Centre National d'Études Spatiales
 (CNES). It consists of a serious of command line utilities to work
 with remote sensing data sets.
@@ -35,8 +36,6 @@ interface.
 Performance wise OTB offers [Streaming and
 Threading](https://www.orfeo-toolbox.org/CookBook/C++/StreamingAndThreading.html)
 for handling large datasets effectively.
-
-
 
 
 
