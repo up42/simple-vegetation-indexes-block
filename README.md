@@ -6,7 +6,7 @@ The code in this repository implements a very simple block that
 computes various vegetation indexes for
 [Pléiades](https://docs.up42.com/getting-started/data-products/pleiades),
 [SPOT 6/7](https://docs.up42.com/getting-started/data-products/spot/)
-and [Sentkn](https://sentinel.esa.int/web/sentinel/missions/sentinel-2 "Sentinel-2").
+and [Sentinel-2](https://sentinel.esa.int/web/sentinel/missions/sentinel-2 "Sentinel-2").
 
  * [NDVI](https://en.wikipedia.org/wiki/Normalized_difference_vegetation_index) - Normalized Difference Vegetation Index
  * [EVI](https://en.wikipedia.org/wiki/Enhanced_vegetation_index) -
