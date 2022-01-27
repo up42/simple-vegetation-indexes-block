@@ -27,8 +27,7 @@ by the French Space Agency &mdash; Centre National d'Études Spatiales
 (CNES). It consists of a serious of command line utilities to work
 with remote sensing data sets.
 
-It has also a [a Python
-API](https://www.orfeo-toolbox.org/CookBook/PythonAPI.html) and
+It has also a [Python API](https://www.orfeo-toolbox.org/CookBook/PythonAPI.html) and
 a [QGIS](https://www.orfeo-toolbox.org/CookBook/QGISInterface.html)
 interface.
 
