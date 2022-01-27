@@ -27,8 +27,8 @@ The calculation is done using the [OrfeoToolbox
 Writen in C++, the
 [OrfeoToolbox](https://www.orfeo-toolbox.org/) (OTB) is maintained
 by the French Space Agency &mdash; Centre National d'Études Spatiales
-(CNES). It consists of a serious of command line utilities to work
-with remote sensing data sets.
+(CNES). It consists of a series of command line utilities to work
+with remote sensing data sets from a user point of view. It offers a toolkit/library to program remote sensing algorithms in C++.
 
 It has also a [Python API](https://www.orfeo-toolbox.org/CookBook/PythonAPI.html) and
 a [QGIS](https://www.orfeo-toolbox.org/CookBook/QGISInterface.html)
