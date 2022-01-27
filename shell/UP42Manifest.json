@@ -1,0 +1,58 @@
+{
+  "_up42_specification_version": 2,
+  "name": "vegetation-indices-omnibus",
+  "type": "processing",
+  "tags": [
+    "imagery",
+    "processing",
+    "vegetation index",
+    "EVI",
+    "EVI2",
+    "SAVI",
+    "NDVI",
+    "BAI"
+  ],
+  "display_name": "Vegetation Indices Omnibus",
+  "description": "Calculates EVI, EVI2, EVI22, SAVI, NDVI, BAI and NBR on Pléiades, SPOT and Sentinel-2.",
+  "parameters": {
+    "indexes": {
+      "type": "array",
+      "default": ["evi", "ndvi"]
+    },
+    "ram": {
+      "type": "integer",
+      "default": 256
+    }
+  },
+  "machine": {
+    "type": "large"
+  },
+  "input_capabilities": {
+    "raster": {
+      "up42_standard": {
+        "format": "GTiff",
+        "bands": [
+          "red",
+          "nir"
+        ],
+        "sensor": {
+          "or": [
+            "Pleiades",
+            "SPOT",
+            "Sentinel2"
+          ]
+        },
+        "dtype": "uint16"
+      }
+    }
+  },
+  "output_capabilities": {
+    "raster": {
+      "up42_standard": {
+        "format": "GTiff",
+        "sensor": ">",
+        "dtype": "float"
+      }
+    }
+  }
+}
