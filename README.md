@@ -8,8 +8,7 @@ computes various vegetation indexes:
  * [NDVI](https://en.wikipedia.org/wiki/Normalized_difference_vegetation_index) - Normalized Difference Vegetation Index
  * [EVI](https://en.wikipedia.org/wiki/Enhanced_vegetation_index) -
    Enhanced Vegetation Index
- *
- [EVI2](https://www.indexdatabase.de/db/si-single.php?sensor_id=96&rsindex_id=237) -
+ * [EVI2](https://www.indexdatabase.de/db/si-single.php?sensor_id=96&rsindex_id=237) -
  Enhanced Vegetation Index 2
  * [EVI2-2](https://www.indexdatabase.de/db/i-single.php?id=576) -
    Enhanced Vegetation Index 2 - 2
@@ -36,101 +35,3 @@ interface.
 Performance wise OTB offers [Streaming and
 Threading](https://www.orfeo-toolbox.org/CookBook/C++/StreamingAndThreading.html)
 for handling large datasets effectively.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#
