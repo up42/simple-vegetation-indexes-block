@@ -1,28 +1,40 @@
 #!/bin/bash
 
-## indexes.sh --- Computes a set of vegetation indexes.
+## indexes.sh --- Computes a set of vegetation indexes using OTB
+## BandMath CLI utility.
 
-## Copyright (C) UP42 GmbH.
+## Copyright (C) 2022 UP42 GmbH.
 
 ## Author: António P. P. Almeida <antonio.almeida@up42.com>
 
-## This program is free software; you can redistribute it and/or
-## modify it under the terms of the GNU General Public License
-## as published by the Free Software Foundation; either version 3
-## of the License, or (at your option) any later version.
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the "Software"),
+# to deal in the Software without restriction, including without limitation
+# the rights to use, copy, modify, merge, publish, distribute, sublicense,
+# and/or sell copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following conditions:
 
-## This program is distributed in the hope that it will be useful,
-## but WITHOUT ANY WARRANTY; without even the implied warranty of
-## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-## GNU General Public License for more details.
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
 
-## You should have received a copy of the GNU General Public License
-## along with this program. If not, see <http://www.gnu.org/licenses/>.
+# Except as contained in this notice, the name(s) of the above copyright
+# holders shall not be used in advertising or otherwise to promote the sale,
+# use or other dealings in this Software without prior written authorization.
+
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
+# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+# FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+# DEALINGS IN THE SOFTWARE.
 
 SCRIPTNAME=${0##*/}
 
 ## Required programs.
 JQ=$(command -v jq) || exit 1
+## Timestamp utility for logging.
+TST=$(command -v ts) || exit 21
 
 function print_usage() {
     echo "Usage: $SCRIPTNAME -p <params> -i <input directory> -o <output directory> -t <path to OTB installation>"
@@ -60,6 +72,7 @@ if [ ! -r "$DATA_JSON" ]; then
     exit 4
 fi
 
+## Check for OrfeoToolbox's presence.
 if [ -x "$OTB_PATH/otbenv.profile" ]; then
     source "$OTB_PATH/otbenv.profile"
 else
@@ -78,8 +91,6 @@ function get_data_path() {
 function get_constellation_name() {
     echo "$($JQ -r '.features[0].properties.constellation | ascii_downcase' "$1")"
 }
-
-TST=$(command -v ts) || exit 21
 
 ## Logs a message and timestamps it.
 ## $1: log message.
@@ -161,7 +172,6 @@ function compute_evi() {
             exit 8
     esac
 }
-
 
 ## Computes the EVI2 for a given set of data.
 ## $1: the path to the data.json file.
