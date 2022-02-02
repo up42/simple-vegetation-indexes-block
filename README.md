@@ -6,7 +6,7 @@ The code in this repository implements a very simple block that
 computes various vegetation indexes for
 [Pléiades](https://docs.up42.com/getting-started/data-products/pleiades),
 [SPOT 6/7](https://docs.up42.com/getting-started/data-products/spot/)
-and [Sentkn](https://sentinel.esa.int/web/sentinel/missions/sentinel-2 "Sentinel-2").
+and [Sentinel-2](https://sentinel.esa.int/web/sentinel/missions/sentinel-2 "Sentinel-2").
 
  * [NDVI](https://en.wikipedia.org/wiki/Normalized_difference_vegetation_index) - Normalized Difference Vegetation Index
  * [EVI](https://en.wikipedia.org/wiki/Enhanced_vegetation_index) -
@@ -27,8 +27,8 @@ The calculation is done using the [OrfeoToolbox
 Writen in C++, the
 [OrfeoToolbox](https://www.orfeo-toolbox.org/) (OTB) is maintained
 by the French Space Agency &mdash; Centre National d'Études Spatiales
-(CNES). It consists of a serious of command line utilities to work
-with remote sensing data sets.
+(CNES). It consists of a series of command line utilities to work
+with remote sensing data sets from a user point of view. It offers a toolkit/library to program remote sensing algorithms in C++.
 
 It has also a [Python API](https://www.orfeo-toolbox.org/CookBook/PythonAPI.html) and
 a [QGIS](https://www.orfeo-toolbox.org/CookBook/QGISInterface.html)
