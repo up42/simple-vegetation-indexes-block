@@ -13,3 +13,6 @@ RUN wget https://www.orfeo-toolbox.org/packages/OTB-7.4.0-Linux64.run && \
 # Get the script for computing the indexes.
 COPY indexes.sh .
 RUN chmod 755 indexes.sh
+
+# Invoking the script to compute the indexes.
+CMD ["./indexes.sh"]

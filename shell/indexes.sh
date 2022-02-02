@@ -41,6 +41,16 @@ function print_usage() {
     exit 2
 }
 
+## Default input and output directories.
+INPUT_DIR=/tmp/input
+OUTPUT_DIR=/tmp/output
+
+## Default location for the OrfeoToolbox.
+OTB_PATH=/otb
+
+## Source the parameters from the environment.
+PARAMS="$UP42_TASK_PARAMETERS"
+
 ## Parse the arguments.
 while getopts :i:o:p:t: OPT; do
     case $OPT in
@@ -148,7 +158,26 @@ function compute_ndvi() {
             ;;
         *)
             echo "$SCRIPTNAME: Cannot compute NDVI for constellation $constellation."
-            exit 6
+            exit 60
+    esac
+}
+
+## Computes the GNDVI for a given set of data.
+## $1: the path to the data.json file.
+## $2: output directory.
+function compute_gndvi() {
+    local constellation="$(get_constellation_name "$1")"
+
+    case $constellation in
+        spot|phr)
+            do_band_math "$(get_data_path "$1")" "(im1b4-im1b2)/(im1b4+im1b2)" "gndvi"
+            ;;
+        sentinel-2)
+            do_band_math "$(get_data_path "$1")" "(im1b8-im1b3)/(im1b8+im1b3)" "gndvi"
+            ;;
+        *)
+            echo "$SCRIPTNAME: Cannot compute GNDVI for constellation $constellation."
+            exit 61
     esac
 }
 
@@ -161,7 +190,7 @@ function compute_evi() {
     case $constellation in
         spot|phr)
             do_band_math "$(get_data_path "$1")" \
-                         "2.5*(im1b4 - im1b1)/(im1b4 + 6*im1b1 - 7.5*im1b3 + 2^16)" "evi0"
+                         "2.5*(im1b4 - im1b1)/(im1b4 + 6*im1b1 - 7.5*im1b3 + 2^16)" "evi"
             ;;
         sentinel-2)
             do_band_math "$(get_data_path "$1")" \
@@ -169,7 +198,7 @@ function compute_evi() {
             ;;
         *)
             echo "$SCRIPTNAME: Cannot compute EVI for constellation $constellation."
-            exit 8
+            exit 80
     esac
 }
 
@@ -190,7 +219,7 @@ function compute_evi2() {
             ;;
         *)
             echo "$SCRIPTNAME: Cannot compute EVI for constellation $constellation."
-            exit 8
+            exit 81
     esac
 }
 
@@ -203,15 +232,15 @@ function compute_evi22() {
     case $constellation in
         spot|phr)
             do_band_math "$(get_data_path "$1")" \
-                         "2.5*(im1b4 - im1b1)/(im1b4 + im1b1 + 2^16)" "evi"
+                         "2.5*(im1b4 - im1b1)/(im1b4 + im1b1 + 2^16)" "evi22"
             ;;
         sentinel-2)
             do_band_math "$(get_data_path "$1")" \
-                         "2.5*(im1b8 - im1b4)/(im1b8 + im1b4 + 2^16)" "evi"
+                         "2.5*(im1b8 - im1b4)/(im1b8 + im1b4 + 2^16)" "evi22"
             ;;
         *)
             echo "$SCRIPTNAME: Cannot compute EVI for constellation $constellation."
-            exit 8
+            exit 82
     esac
 }
 
@@ -234,6 +263,25 @@ function compute_savi() {
     esac
 }
 
+## Computes the CVI for a given set of data.
+## $1: the path to the data.json file.
+## $2: output directory.
+function compute_cvi() {
+    local constellation="$(get_constellation_name "$1")"
+
+    case $constellation in
+        spot|phr)
+            do_band_math "$(get_data_path "$1")" "im1b4 * im1b1/im1b2^2" "cvi"
+            ;;
+        sentinel-2)
+            do_band_math "$(get_data_path "$1")" "im1b8 * im1b4/im1b3^2" "cvi"
+            ;;
+        *)
+            echo "$SCRIPTNAME: Cannot compute CVI for constellation $constellation."
+            exit 10
+    esac
+}
+
 ## Computes the Burn Area Index (BAI) for a given set of data.
 ## $1: the path to the data.json file.
 ## $2: output directory.
@@ -251,7 +299,7 @@ function compute_bai() {
             ;;
         *)
             echo "$SCRIPTNAME: Cannot compute BAI for constellation $constellation."
-            exit 10
+            exit 11
     esac
 }
 
@@ -273,7 +321,7 @@ function compute_nbr() {
             ;;
         *)
             echo "$SCRIPTNAME: Cannot compute NBR for constellation $constellation."
-            exit 10
+            exit 12
     esac
 }
 
@@ -285,6 +333,9 @@ function dispatch_operation() {
     case "$1" in
         "ndvi")
             compute_ndvi "$DATA_JSON" "OUTPUT_DIR"
+            ;;
+        "gndvi")
+            compute_gndvi "$DATA_JSON" "OUTPUT_DIR"
             ;;
         "evi")
             compute_evi "$DATA_JSON" "OUTPUT_DIR"
@@ -298,6 +349,9 @@ function dispatch_operation() {
         "savi")
             compute_savi "$DATA_JSON" "OUTPUT_DIR"
             ;;
+        "cvi")
+            compute_cvi "$DATA_JSON" "OUTPUT_DIR"
+            ;;
         "bai")
             compute_bai "$DATA_JSON" "OUTPUT_DIR"
             ;;
@@ -306,9 +360,9 @@ function dispatch_operation() {
             ;;
         *)
             echo "$SCRIPTNAME: Unknown operation requested."
-            echo "Must be one of: ndvi, evi, evi2, evi22, savi, bai or nbr."
+            echo "Must be one of: ndvi, gndvi, evi, evi2, evi22, savi, cvi, bai or nbr."
             print_usage
-            exit 11
+            exit 13
     esac
 }
 
