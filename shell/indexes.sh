@@ -45,8 +45,10 @@ function print_usage() {
 INPUT_DIR=/tmp/input
 OUTPUT_DIR=/tmp/output
 
-## Default location for the OrfeoToolbox.
-OTB_PATH=/otb
+## Get the path to the default otbcli_BandMath application.
+OTB_CMD=$(command -v otbcli_BandMath) || exit 91
+
+echo "$OTB_CMD"
 
 ## Source the parameters from the environment.
 PARAMS="$UP42_TASK_PARAMETERS"
@@ -82,11 +84,9 @@ if [ ! -r "$DATA_JSON" ]; then
     exit 4
 fi
 
-## Check for OrfeoToolbox's presence.
-if [ -x "$OTB_PATH/otbenv.profile" ]; then
-    source "$OTB_PATH/otbenv.profile"
-else
-    echo "$SCRIPTNAME: Cannot locate OrfeoToolbox installation."
+## Check for OrfeoToolbox otbcli_BandMath in path.
+if [ ! -x "$OTB_CMD" ]; then
+    echo "$SCRIPTNAME: Cannot locate otbcli_BandMath."
     exit 5
 fi
 
@@ -274,7 +274,7 @@ function compute_cvi() {
             do_band_math "$(get_data_path "$1")" "im1b4 * im1b1/im1b2^2" "cvi"
             ;;
         sentinel-2)
-            do_band_math "$(get_data_path "$1")" "im1b8 * im1b4/im1b3^2" "cvi"
+            do_band_math "$(get_data_path "$1")" "im1b9 * im1b5/im1b3^2" "cvi"
             ;;
         *)
             echo "$SCRIPTNAME: Cannot compute CVI for constellation $constellation."
