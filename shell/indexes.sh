@@ -37,7 +37,7 @@ JQ=$(command -v jq) || exit 1
 TST=$(command -v ts) || exit 21
 
 function print_usage() {
-    echo "Usage: $SCRIPTNAME -p <params> -i <input directory> -o <output directory> -t <path to OTB installation>"
+    echo "Usage: $SCRIPTNAME [-p <params>] [-i <input directory>] [-o <output directory>] [-t <path to OTB installation>]"
     exit 2
 }
 
