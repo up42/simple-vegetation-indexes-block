@@ -46,7 +46,7 @@ INPUT_DIR=/tmp/input
 OUTPUT_DIR=/tmp/output
 
 ## Get the path to the default otbcli_BandMath application.
-OTB_CMD=$(command -v otbcli_BandMath) || exit 91
+OTB_CMD=$(command -v otbcli_BandMath) || exit 100
 
 echo "$OTB_CMD"
 
@@ -54,7 +54,7 @@ echo "$OTB_CMD"
 PARAMS="$UP42_TASK_PARAMETERS"
 
 ## Parse the arguments.
-while getopts :i:o:p:t: OPT; do
+while getopts :i:o:p:t:y: OPT; do
     case $OPT in
         i|+i)
             INPUT_DIR="$(realpath "$OPTARG")"
@@ -170,7 +170,7 @@ function compute_gndvi() {
 
     case $constellation in
         spot|phr)
-            do_band_math "$(get_data_path "$1")" "(im1b4-im1b2)/(im1b4+im1b2)" "gndvi"
+            do_band_math "$(get_data_path "$1")" "($im1b4-im1b2)/(im1b4+im1b2)" "gndvi"
             ;;
         sentinel-2)
             do_band_math "$(get_data_path "$1")" "(im1b8-im1b3)/(im1b8+im1b3)" "gndvi"
@@ -180,6 +180,27 @@ function compute_gndvi() {
             exit 61
     esac
 }
+
+## Computes the WDRVI for a given set of data.
+## $1: the path to the data.json file.
+## $2: output directory.
+## $3: WDRVI 'a' coefficient.
+function compute_wdrvi() {
+    local constellation="$(get_constellation_name "$1")"
+
+    case $constellation in
+        spot|phr)
+            do_band_math "$(get_data_path "$1")" "(${3} * im1b4 - im1b1)/(im1b4+im1b1)" "wdrvi"
+            ;;
+        sentinel-2)
+            do_band_math "$(get_data_path "$1")" "(${3}  * im1b8 - im1b4)/(im1b8+im1b4)" "wdrvi"
+            ;;
+        *)
+            echo "$SCRIPTNAME: Cannot compute GNDVI for constellation $constellation."
+            exit 61
+    esac
+}
+
 
 ## Computes the EVI for a given set of data.
 ## $1: the path to the data.json file.
@@ -223,7 +244,7 @@ function compute_evi2() {
     esac
 }
 
-## Computes the EVI for a given set of data.
+## Computes the EVI22 for a given set of data.
 ## $1: the path to the data.json file.
 ## $2: output directory.
 function compute_evi22() {
@@ -244,6 +265,51 @@ function compute_evi22() {
     esac
 }
 
+## Computes the ARVI for a given set of data.
+## $1: the path to the data.json file.
+## $2: output directory.
+## $3: y coefficient value.
+function compute_arvi() {
+    local constellation="$(get_constellation_name "$1")"
+
+    case $constellation in
+        spot|phr)
+            log_it "ARVI coefficient y = ${3}."
+            do_band_math "$(get_data_path "$1")" \
+                         "(im1b4 + ${3} * im1b3 - (1 + ${3}) * im1b1)/(im1b4 + (1 - ${3}) * im1b1 + ${3} * im1b3)" "arvi"
+            ;;
+        sentinel-2)
+            log_it "ARVI coefficient y = ${3}."
+            do_band_math "$(get_data_path "$1")" \
+                         "(im1b9 + ${3} * im1b2 - (1 + ${3}) * im1b4)/(im1b9 + (1 - ${3}) * im1b4 + ${3} * im1b2)" "arvi"
+            ;;
+        *)
+            echo "$SCRIPTNAME: Cannot compute EVI for constellation $constellation."
+            exit 83
+    esac
+}
+
+## Computes the VARI for a given set of data.
+## $1: the path to the data.json file.
+## $2: output directory.
+function compute_vari() {
+    local constellation="$(get_constellation_name "$1")"
+
+    case $constellation in
+        spot|phr)
+            do_band_math "$(get_data_path "$1")" "(im1b2 - im1b1)/(im1b2 + im1b1 - im1b3)" "vari"
+            ;;
+        sentinel-2)
+            do_band_math "$(get_data_path "$1")" \
+                         "(im1b3 - im1b4)/(im1b3 + im1b4 - im1b2) > 0 ? min((im1b3 - im1b4)/(im1b3 + im1b4 - im1b2), 16) : max((im1b3 - im1b4)/(im1b3 + im1b4 - im1b2), -16)" "vari"
+            ;;
+        *)
+            echo "$SCRIPTNAME: Cannot compute VARI for constellation $constellation."
+            exit 84
+    esac
+}
+
+### Soil related indexes.
 ## Computes the SAVI for a given set of data.
 ## $1: the path to the data.json file.
 ## $2: output directory.
@@ -263,18 +329,106 @@ function compute_savi() {
     esac
 }
 
+## Computes the OSAVI for a given set of data.
+## $1: the path to the data.json file.
+## $2: output directory.
+function compute_osavi() {
+    local constellation="$(get_constellation_name "$1")"
+
+    case $constellation in
+        spot|phr)
+            do_band_math "$(get_data_path "$1")" "1.16*(im1b4-im1b1)/(im1b4+im1b1+0.16*2^16)" "osavi"
+            ;;
+        sentinel-2)
+            do_band_math "$(get_data_path "$1")" "1.16*(im1b8-im1b4)/(im1b8+im1b4+0.16*2^16)" "osavi"
+            ;;
+        *)
+            echo "$SCRIPTNAME: Cannot compute OSAVI for constellation $constellation."
+            exit 91
+    esac
+}
+
+## Computes the OSAVI for a given set of data.
+## $1: the path to the data.json file.
+## $2: output directory.
+function compute_msavi() {
+    local constellation="$(get_constellation_name "$1")"
+
+    case $constellation in
+        spot|phr)
+            do_band_math "$(get_data_path "$1")" "(2*im1b4 + 2^16 - sqrt(2*(im1b4 + 2^16)^2 - 8*(im1b4 - im1b1)^2))/2" "msavi"
+            ;;
+        sentinel-2)
+            do_band_math "$(get_data_path "$1")" "(2*im1b9 + 2^16 - sqrt(2*(im1b9 + 2^16)^2 - 8*(im1b5 - im1b5)^2))/2" "msavi"
+            ;;
+        *)
+            echo "$SCRIPTNAME: Cannot compute MSAVI for constellation $constellation."
+            exit 92
+    esac
+}
+
+### Chlorophyll related indexes.
+
+## Computes the SIPI for a given set of data.
+## $1: the path to the data.json file.
+## $2: output directory.
+function compute_sipi() {
+    local constellation="$(get_constellation_name "$1")"
+
+    ## Dealing with underflows and overflows.
+    case $constellation in
+        spot|phr)
+            do_band_math "$(get_data_path "$1")" \
+                         "(im1b4 - im1b3)/(im1b4 - im1b1) < 0 ? 0 : (im1b4 - im1b3)/(im1b4 - im1b1) > 2 ? 2 : (im1b4 - im1b3)/(im1b4 - im1b1)" "sipi"
+            ;;
+        sentinel-2)
+            do_band_math "$(get_data_path "$1")" \
+                         "(im1b8 - im1b1)/(im1b8 - im1b4) < 0 ? 0 :  (im1b8 - im1b1)/(im1b8 - im1b4) > 2 ? 2 : (im1b8 - im1b1)/(im1b8 - im1b4)" "sipi"
+            ;;
+        *)
+            echo "$SCRIPTNAME: Cannot compute SIPI for constellation $constellation."
+            exit 85
+    esac
+}
+
+## Computes the SIPI2/3 for a given set of data.
+## $1: the path to the data.json file.
+## $2: output directory.
+function compute_sipi3() {
+    local constellation="$(get_constellation_name "$1")"
+
+    ## Dealing with underflows and overflows.
+    case $constellation in
+        spot|phr)
+            log_it "Warning: SIPI3 is identical to SIPI for constellation $constellation."
+            do_band_math "$(get_data_path "$1")" \
+                         "(im1b4 - im1b3)/(im1b4 - im1b1) < 0 ? 0 : (im1b4 - im1b3)/(im1b4 - im1b1) > 2 ? 2 : (im1b4 - im1b3)/(im1b4 - im1b1)" "sipi3"
+            ;;
+        sentinel-2)
+            do_band_math "$(get_data_path "$1")" \
+                         "(im1b8 - im1b2)/(im1b8 - im1b4) < 0 ? 0 :  (im1b8 - im1b2)/(im1b8 - im1b4) > 2 ? 2 : (im1b8 - im1b2)/(im1b8 - im1b4)" "sipi3"
+            ;;
+        *)
+            echo "$SCRIPTNAME: Cannot compute SIPI3 for constellation $constellation."
+            exit 86
+    esac
+}
+
 ## Computes the CVI for a given set of data.
 ## $1: the path to the data.json file.
 ## $2: output directory.
 function compute_cvi() {
     local constellation="$(get_constellation_name "$1")"
 
+    ## Use range from Sentinel-2 of "useful" values.
     case $constellation in
         spot|phr)
-            do_band_math "$(get_data_path "$1")" "im1b4 * im1b1/im1b2^2" "cvi"
+            do_band_math "$(get_data_path "$1")" \
+                         "im1b4 * im1b1 / im1b2^2 > 220.152 ? 220.152 : im1b4 * im1b1/im1b2^2 < 0.0016 ? 0 : im1b4 * im1b1/im1b2^2" "cvi"
             ;;
         sentinel-2)
-            do_band_math "$(get_data_path "$1")" "im1b9 * im1b5/im1b3^2" "cvi"
+            do_band_math "$(get_data_path "$1")" \
+                         "im1b8 * im1b4 / im1b3^2 > 220.152 ? 220.152 : im1b8 * im1b4/im1b3^2 < 0.0016 ? 0 : im1b8 * im1b4/im1b3^2" "cvi"
             ;;
         *)
             echo "$SCRIPTNAME: Cannot compute CVI for constellation $constellation."
@@ -282,6 +436,134 @@ function compute_cvi() {
     esac
 }
 
+## Computes the CIG for a given set of data.
+## $1: the path to the data.json file.
+## $2: output directory.
+function compute_cig() {
+    local constellation="$(get_constellation_name "$1")"
+
+    case $constellation in
+        spot|phr)
+            do_band_math "$(get_data_path "$1")" "im1b4/im1b2 - 1" "cig"
+            ;;
+        sentinel-2)
+            do_band_math "$(get_data_path "$1")" "im1b9/im1b3 - 1" "cig"
+            ;;
+        *)
+            echo "$SCRIPTNAME: Cannot compute CIG for constellation $constellation."
+            exit 101
+    esac
+}
+
+### Red Edge related indexes.
+## Computes the ReCI for a given set of data.
+## $1: the path to the data.json file.
+## $2: output directory.
+function compute_reci() {
+    local constellation="$(get_constellation_name "$1")"
+
+    case $constellation in
+        spot|phr)
+            do_band_math "$(get_data_path "$1")" "im1b4/im1b1 - 1" "reci"
+            ;;
+        sentinel-2)
+            do_band_math "$(get_data_path "$1")" "im1b8/im1b4 - 1" "reci"
+            ;;
+        *)
+            echo "$SCRIPTNAME: Cannot compute ReCI for constellation $constellation."
+            exit 102
+    esac
+}
+
+## Computes the NDRE for a given set of data.
+## $1: the path to the data.json file.
+## $2: output directory.
+function compute_ndre() {
+    local constellation="$(get_constellation_name "$1")"
+
+    case $constellation in
+        spot|phr)
+            log_it "Warning: NDRE is equal to NDVI for constellation $constellation."
+            do_band_math "$(get_data_path "$1")" "(im1b4 - im1b1)/(im1b4 + im1b1)" "ndre"
+            ;;
+        sentinel-2)
+            do_band_math "$(get_data_path "$1")" "(im1b8 - im1b5)/(im1b8 + im1b5)" "ndre"
+            ;;
+        *)
+            echo "$SCRIPTNAME: Cannot compute NDRE for constellation $constellation."
+            exit 103
+    esac
+}
+
+### Snow related indexes.
+## Computes the NDSI for a given set of Sentinel 2
+## data.
+## $1: the path to the data.json file.
+## $2: output directory.
+function compute_ndsi() {
+    local constellation="$(get_constellation_name "$1")"
+
+    case $constellation in
+        spot|phr)
+            echo "Normalized Difference Snow Index (NDSI) cannot be calculated for constellation $constellation."
+            exit 22
+            ;;
+        sentinel-2)
+            do_band_math "$(get_data_path "$1")" \
+                         "(im1b3 - im1b11)/(im1b3 + im1b11)" "ndsi"
+            ;;
+        *)
+            echo "$SCRIPTNAME: Cannot compute NDSI for constellation $constellation."
+            exit 23
+    esac
+}
+
+### Water related indexes.
+## Computes the NDWI for a given set of Sentinel 2
+## data. Body of water detection.
+## $1: the path to the data.json file.
+## $2: output directory.
+function compute_ndwi() {
+    local constellation="$(get_constellation_name "$1")"
+
+    case $constellation in
+        spot|phr)
+            echo "Normalized Difference Water Index (NDWI) cannot be calculated for constellation $constellation."
+            exit 30
+            ;;
+        sentinel-2)
+            do_band_math "$(get_data_path "$1")" \
+                         "(im1b3 - im1b8)/(im1b3 + im1b8)" "ndwi"
+            ;;
+        *)
+            echo "$SCRIPTNAME: Cannot compute NDSI for constellation constellation $constellation."
+            exit 31
+    esac
+}
+
+## Computes the NDWI2 for a given set of Sentinel 2
+## data. Drought & irrigation assessment.
+## $1: the path to the data.json file.
+## $2: output directory.
+function compute_ndwi2() {
+    local constellation="$(get_constellation_name "$1")"
+
+    case $constellation in
+        spot|phr)
+            echo "Normalized Difference Water Index 2 (drought & irrigation) (NDWI2) cannot be calculated for $constellation."
+            exit 32
+            ;;
+        sentinel-2)
+            do_band_math "$(get_data_path "$1")" \
+                         "(im1b9 - im1b11)/(im1b9 + im1b11)" "ndwi2"
+            ;;
+        *)
+            echo "$SCRIPTNAME: Cannot compute NDWI2 (drought & irrigation) for constellation $constellation."
+            exit 33
+    esac
+}
+
+### Fire related indexes.
 ## Computes the Burn Area Index (BAI) for a given set of data.
 ## $1: the path to the data.json file.
 ## $2: output directory.
@@ -312,7 +594,7 @@ function compute_nbr() {
 
     case $constellation in
         spot|phr)
-            echo "Normal Burn Rate cannot be calculated for $constellation."
+            echo "Normal Burn Rate (NBR) cannot be calculated for constellation $constellation."
             exit 20
             ;;
         sentinel-2)
@@ -331,36 +613,18 @@ function compute_nbr() {
 function dispatch_operation() {
     ## Perfornm the requested operation.
     case "$1" in
-        "ndvi")
-            compute_ndvi "$DATA_JSON" "OUTPUT_DIR"
+        "arvi")
+            compute_arvi "$DATA_JSON" "OUTPUT_DIR" "$ARVI_COEFF"
             ;;
-        "gndvi")
-            compute_gndvi "$DATA_JSON" "OUTPUT_DIR"
+        "wdrvi")
+            compute_wdrvi "$DATA_JSON" "OUTPUT_DIR" "$WDRVI_COEFF"
             ;;
-        "evi")
-            compute_evi "$DATA_JSON" "OUTPUT_DIR"
-            ;;
-        "evi2")
-            compute_evi2 "$DATA_JSON" "OUTPUT_DIR"
-            ;;
-        "evi22")
-            compute_evi22 "$DATA_JSON" "OUTPUT_DIR"
-            ;;
-        "savi")
-            compute_savi "$DATA_JSON" "OUTPUT_DIR"
-            ;;
-        "cvi")
-            compute_cvi "$DATA_JSON" "OUTPUT_DIR"
-            ;;
-        "bai")
-            compute_bai "$DATA_JSON" "OUTPUT_DIR"
-            ;;
-        "nbr")
-            compute_nbr "$DATA_JSON" "OUTPUT_DIR"
+        ndvi|gndvi|evi|evi2|evi22|vari|savi|osavi|msavi|sipi|sipi3|cvi|cig|reci|ndre|ndsi|ndwi|ndwi2|bai|nbr)
+            compute_${1} "$DATA_JSON" "OUTPUT_DIR"
             ;;
         *)
             echo "$SCRIPTNAME: Unknown operation requested."
-            echo "Must be one of: ndvi, gndvi, evi, evi2, evi22, savi, cvi, bai or nbr."
+            echo "Must be one of: ndvi, gndvi, wdrvi, evi, evi2, evi22, arvi, vari, savi, osavi, msavi, sipi, sipi3, cvi, cig, reci, ndre, ndsi, ndwi, ndwi2, bai or nbr."
             print_usage
             exit 13
     esac
@@ -372,7 +636,10 @@ function compute_indices() {
     local indexes="$(echo "$1" | $JQ -r '.indexes[]')"
     ## Get the RAM to be used by OTB.
     OTB_RAM=$(echo "$1" | $JQ -r '.ram')
-
+    ##  Get the ARVI coefficient.
+    ARVI_COEFF=$(echo "$1" | $JQ -r '.arvi_y')
+    ##  Get the WDRVI coefficient.
+    WDRVI_COEFF=$(echo "$1" | $JQ -r '.wdrvi_a')
     ## Create the output data.json file,
     create_data_json "$DATA_JSON"
     ## Loop on the given indexes.
