@@ -48,8 +48,6 @@ OUTPUT_DIR=/tmp/output
 ## Get the path to the default otbcli_BandMath application.
 OTB_CMD=$(command -v otbcli_BandMath) || exit 100
 
-echo "$OTB_CMD"
-
 ## Source the parameters from the environment.
 PARAMS="$UP42_TASK_PARAMETERS"
 
