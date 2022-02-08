@@ -359,7 +359,7 @@ function compute_msavi() {
             do_band_math "$(get_data_path "$1")" "(2*im1b4 + 2^16 - sqrt(2*(im1b4 + 2^16)^2 - 8*(im1b4 - im1b1)^2))/2" "msavi"
             ;;
         sentinel-2)
-            do_band_math "$(get_data_path "$1")" "(2*im1b9 + 2^16 - sqrt(2*(im1b9 + 2^16)^2 - 8*(im1b5 - im1b5)^2))/2" "msavi"
+            do_band_math "$(get_data_path "$1")" "(2*im1b8 + 2^16 - sqrt(2*(im18 + 2^16)^2 - 8*(im1b4 - im1b4)^2))/2" "msavi"
             ;;
         *)
             echo "$SCRIPTNAME: Cannot compute MSAVI for constellation $constellation."
@@ -447,7 +447,7 @@ function compute_cig() {
             do_band_math "$(get_data_path "$1")" "im1b4/im1b2 - 1" "cig"
             ;;
         sentinel-2)
-            do_band_math "$(get_data_path "$1")" "im1b9/im1b3 - 1" "cig"
+            do_band_math "$(get_data_path "$1")" "im1b8/im1b3 - 1" "cig"
             ;;
         *)
             echo "$SCRIPTNAME: Cannot compute CIG for constellation $constellation."
