@@ -4,6 +4,10 @@ FROM debian:testing-slim
 RUN apt-get update && \
     apt-get install -y --no-install-recommends jq moreutils coreutils bash otb-bin
 
+# Include the manifest.
+ARG manifest
+LABEL "up42_manifest"=$manifest
+
 # Run the script as non-root.
 ARG OTB_USERNAME="otbuser"
 RUN useradd -ms /bin/bash $OTB_USERNAME
