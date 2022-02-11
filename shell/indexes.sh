@@ -609,7 +609,7 @@ function compute_nbr() {
 ## operation.
 ## $1: operation.
 function dispatch_operation() {
-    ## Perfornm the requested operation.
+    ## Perform the requested operation.
     case "$1" in
         "arvi")
             compute_arvi "$DATA_JSON" "OUTPUT_DIR" "$ARVI_COEFF"

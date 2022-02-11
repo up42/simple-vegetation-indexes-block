@@ -20,7 +20,7 @@
     },
     "arvi_y": {
       "type": "number",
-      "default": 0.16
+      "default": 0.106
     },
     "wdrvi_a": {
       "type": "number",
