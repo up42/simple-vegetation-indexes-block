@@ -341,11 +341,11 @@ function compute_osavi() {
     case $constellation in
         spot|phr)
             do_band_math "$(get_data_path "$1")" \
-                         "1.16*(im1b4-im1b1)/(im1b4+im1b1+0.16*$SCALING_FACTOR)" "osavi"
+                         "1.16*(im1b4 - im1b1)/(im1b4 + im1b1 + 0.16*$SCALING_FACTOR)" "osavi"
             ;;
         sentinel-2)
             do_band_math "$(get_data_path "$1")" \
-                         "1.16*(im1b8-im1b4)/(im1b8+im1b4+0.16*$SCALING_FACTOR)" "osavi"
+                         "1.16*(im1b8 - im1b4)/(im1b8 + im1b4 + 0.16*$SCALING_FACTOR)" "osavi"
             ;;
         *)
             echo "$SCRIPTNAME: Cannot compute OSAVI for constellation $constellation."

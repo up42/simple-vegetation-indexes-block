@@ -8,7 +8,7 @@
     "vegetation index"
   ],
   "display_name": "Vegetation Indices Omnibus",
-  "description": "Calculates NDVI, GNDVI, WDRVI, EVI, EVI2, EVI22,SIPI, SIPI3, CVI, CIG, ReCI, NDRE, ARV, VARI, SAVI, OSAVI, MSAVI, NDSI, NDWI, NDWI2, BAI and NBR for Pléiades, SPOT and Sentinel-2.",
+  "description": "Calculates NDVI, GNDVI, WDRVI, EVI, EVI2, EVI22, SIPI, SIPI3, CVI, CIG, ReCI, NDRE, ARVI, VARI, SAVI, OSAVI, MSAVI, NDSI, NDWI, NDWI2, BAI and NBR for Pléiades, SPOT and Sentinel-2.",
   "parameters": {
     "indexes": {
       "type": "array",

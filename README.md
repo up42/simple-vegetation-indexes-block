@@ -12,16 +12,41 @@ and [Sentinel-2](https://sentinel.esa.int/web/sentinel/missions/sentinel-2 "Sent
    Normalized Difference Vegetation Index
  * [GNDVI](https://www.indexdatabase.de/db/i-single.php?id=28) - Green
    Normalized Difference Vegetation Index
+ * [WDRVI](https://www.indexdatabase.de/db/i-single.php?id=125) - Wide
+   Dynamic Range Vegetation Index 
  * [EVI](https://en.wikipedia.org/wiki/Enhanced_vegetation_index) -
    Enhanced Vegetation Index
  * [EVI2](https://www.indexdatabase.de/db/si-single.php?sensor_id=96&rsindex_id=237) -
- Enhanced Vegetation Index 2
+   Enhanced Vegetation Index 2
  * [EVI2-2](https://www.indexdatabase.de/db/i-single.php?id=576) -
    Enhanced Vegetation Index 2 - 2
- * [SAVI](https://en.wikipedia.org/wiki/Soil-adjusted_vegetation_index) -
-   Soil-Adjusted Vegetation Index
+ * [SIPI](https://www.indexdatabase.de/db/i-single.php?id=90) -
+   Structure Intensive Pigment Index
+ * [SIPI3](https://www.indexdatabase.de/db/i-single.php?id=291) -
+   Structure Intensive Pigment Index 3
  * [CVI](https://www.indexdatabase.de/db/i-single.php?id=391) -
    Chlorophyll Vegetation Index
+ * [CIG](https://www.indexdatabase.de/db/i-single.php?id=128) -
+   Chlorophyll Index Green
+ * [ReCI](https://www.indexdatabase.de/db/i-single.php?id=190) - Red
+   Edge Chlorophyll Index
+ * [NDRE](https://www.indexdatabase.de/db/i-single.php?id=223) -
+   Normalized Difference Red Edge
+ * [ARVI](https://www.indexdatabase.de/db/i-single.php?id=4) -
+   Atmospherically Resistant Vegetation Index
+ * [VARI](https://www.indexdatabase.de/db/i-single.php?id=356) -
+   Visible Atmospherically Resistant Index
+ * [SAVI](https://en.wikipedia.org/wiki/Soil-adjusted_vegetation_index) -
+   Soil-Adjusted Vegetation Index
+ * [OSAVI](https://www.indexdatabase.de/db/i-single.php?id=63) -
+   Optimized Soil Adjusted Vegetation Index
+ * [MSAVI](https://www.indexdatabase.de/db/i-single.php?id=44) -
+   Modified Soil Adjusted Vegetation Index
+ * [NDSI](http://space4water.org/taxonomy/term/1247) - Normalized
+   Difference Snow Index 
+ * [NDWI/NDWI2](https://en.wikipedia.org/wiki/Normalized_difference_water_index) -
+   Normalized Difference Water Index for water body detectiion (NDWI)
+   and for drought and irrigation management (NDWI2)
  * [BAI](https://www.space4water.org/taxonomy/term/1255) - Burn Area Index
  * [NBR](https://un-spider.org/advisory-support/recommended-practices/recommended-practice-burn-severity/in-detail/normalized-burn-ratio) -
    Normalized Burn Ratio
