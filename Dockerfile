@@ -1,6 +1,6 @@
 FROM debian:testing-slim
 
-# Required packages.
+# Get the required packages from Debian.
 RUN apt-get update && \
     apt-get install -y --no-install-recommends jq moreutils coreutils bash otb-bin
 

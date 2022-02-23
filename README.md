@@ -23,7 +23,7 @@ and [Sentinel-2](https://sentinel.esa.int/web/sentinel/missions/sentinel-2 "Sent
  * [SIPI](https://www.indexdatabase.de/db/i-single.php?id=90) -
    Structure Intensive Pigment Index
  * [SIPI3](https://www.indexdatabase.de/db/i-single.php?id=291) -
-   Structure Intensive Pigment Index 3
+   Structure Intensive Pigment Index 3d
  * [CVI](https://www.indexdatabase.de/db/i-single.php?id=391) -
    Chlorophyll Vegetation Index
  * [CIG](https://www.indexdatabase.de/db/i-single.php?id=128) -
@@ -56,8 +56,8 @@ The calculation is done using the
 utility.
 
 Writen in C++, the [OrfeoToolbox](https://www.orfeo-toolbox.org/)
-(OTB) is maintained by the French Space Agency &mdash; Centre National
-d'Études Spatiales (CNES). It consists of a series of command line
+(OTB) is maintained by the French Space Agency &mdash; [Centre National
+d'Études Spatiales](https://cnes.fr/en) (CNES). It consists of a series of command line
 utilities to work with remote sensing data sets from a user point of
 view. It offers a toolkit/library to program remote sensing algorithms
 in C++.
@@ -66,10 +66,8 @@ It has also a [Python API](https://www.orfeo-toolbox.org/CookBook/PythonAPI.html
 a [QGIS](https://www.orfeo-toolbox.org/CookBook/QGISInterface.html)
 interface.
 
-Performance wise OTB offers [Streaming and
-Threading](https://www.orfeo-toolbox.org/CookBook/C++/StreamingAndThreading.html)
+Performance wise OTB offers [Streaming and Threading](https://www.orfeo-toolbox.org/CookBook/C++/StreamingAndThreading.html)
 for handling large datasets effectively.
-
 
 ### Inputs & outputs
 
@@ -102,6 +100,27 @@ and delivers a GeoTIFF as output capability.
 
 ## Usage
 
+### Command line arguments
+
+The script accepts up to four **optional** commmand line arguments:
+
+ * `-p`: A JSON document with the parameters accepted by the block.
+ * `-i`: The input directory. The path to the `data.json` file of the
+   input imagery is.
+ * `-o`: The output directory. The path to the `data.json` file of the
+   output imagery is. 
+ * `-t`: Path to the  `otbcli_BandMath` utility from OTB.
+
+If any of the optional arguments are not given the script uses
+defaults. These are:
+
+ * block parameters (`-p`): it extracts these from the string given as
+   value of the `UP42_TASK_PARAMETERS` environment variable.
+ * input directory (`-i`): `/tmp/input`
+ * output directory (`-o`): `/tmp/output`
+ * path to `otbcli_BandMath` (`-p`): obtained from the operating
+   system. It uses `command -v` from Bash to find the path.
+
 ### Clone the repository
 
 ```bash
@@ -111,16 +130,20 @@ where `<directory>` is the directory where the cloning is done.
 
 ### Build the docker images
 
-For building the images you should tag the image such that it can bu
+For building the images you should tag the image such that it can be
 pushed to the UP42 docker registry, enabling you to run it as a custom
-block. For that you need to pass your user ID (UID) in the `make`
+block. For that you need to pass your UP42 user ID (UID) in the `make`
 command.
 
 The quickest way to get that is just to go into the UP42 console and
 copy & paste from the last clipboard that you get at the
 [custom-blocks](https://console.up42.com/custom-blocks) page and after
 clicking on **PUSH a BLOCK to THE PLATFORM**. For example, it will be
-something like:
+of the form:
+
+    https://console.up42.com/custom-blocks?workspace=<UID>
+
+where your `UID` is also the workspace ID.
 
 ```bash
 docker push registry.up42.com/<UID>/<image_name>:<tag>
@@ -136,11 +159,11 @@ You can avoid selecting the exact UID by using `pbpaste` in a Mac (OS
 X) or `xsel --clipboard --output` in Linux and do:
 
 ```bash
-# mac: OS X.
-make build UID=$(pbpaste | cut -f 2 -d '/')
+# Mac OS X.
+make build UID=$(pbpaste | cut -f 2 -d '=')
 
 # Linux.
-make build UID=$(xsel --clipboard --output | cut -f 2 -d '/')
+make build UID=$(xsel --clipboard --output | cut -f 2 -d '=')
 ```
 
 You can additionaly specifiy a custom tag for your image (default tag
@@ -161,7 +184,7 @@ make login USER=me@example.com
 ```
 
 where `me@example.com` should be replaced by your username, which is
-the email address you use in UP42.
+the email address you use for your  UP42 aacount.
 
 Now you can finally push the image to the UP42 docker registry:
 
@@ -173,12 +196,13 @@ where `<UID>` is user ID referenced above. Again using the copy &
 pasting on the clipboard.
 
 ```bash
-# mac: OS X.
-make build UID=$(pbpaste | cut -f 2 -d '/')
+# Mac OS X.
+make build UID=$(pbpaste | cut -f 2 -d '=')
 
 # Linux.
-make build UID=$(xsel --clipboard --output | cut -f 2 -d '/')
+make build UID=$(xsel --clipboard --output | cut -f 2 -d '=')
 ```
+
 ```bash
 make push UID=<UID>
 ```
@@ -194,10 +218,10 @@ pasting on the clipboard.
 
 ```bash
 # mac: OS X.
-make build UID=$(pbpaste | cut -f 2 -d '/') DOCKER_TAG=<docker tag>
+make build UID=$(pbpaste | cut -f 2 -d '=') DOCKER_TAG=<docker tag>
 
 # Linux.
-make build UID=$(xsel --clipboard --output | cut -f 2 -d '/') DOCKER_TAG=<docker tag>
+make build UID=$(xsel --clipboard --output | cut -f 2 -d '=') DOCKER_TAG=<docker tag>
 ```
 
 After the image is pushed you should be able to see your custom block
@@ -209,38 +233,75 @@ now use the block in a workflow.
 #### Configure the job
 
 To run the docker image locally you need first to configure the job
-with the parameters specific to this block. Create a `params.json`
-like this:
+with the parameters specific for this block. Create a `params.json`
+file like this:
 
-```js
+```json
 {
-  "polarisations": <array polarizations>,
-  "mask": <array mask type>,
-  "tcorrection": <boolean>
+  "indexes": `<indexes>`,
+  "arvi_y": `<arvi_y>`,
+  "wdrvi_a": `<wdrvi_a>`,
+  "ram": `<RAM size in MB>`
 }
 ```
 where:
 
-+ `<array polarizations>`: JS array of possible polarizations: `"VV"`,
-  `"VH"`, `"HV"`, `"HH"`.
-+ `<array of mask type>`: JS array of possible mask `"sea"` or `"land"`.
-+ `<boolean>`: `true` or `false` stating if terrain correction is to
-  be done or not.
+ + `<indexes>`: JS array of possible vegataion indexes,
+ + `<arvi_y>`: value of y coefficient for computing ARVI. 
+ + `<wdrvi_a>`: value of a coefficient for computing WDRVI.
+ + `<RAM size in MB>`: the RAM size in MB made available to OTB.
 
 Here is an example `params.json`:
 
-```js
+```json
 {
-  "polarisations": ["VV"],
-  "mask": ["sea"],
-  "tcorrection": false
+   "indexes":[
+   "ndvi",
+   "gndvi",
+   "evi",
+   "evi2",
+   "evi22",
+   "arvi",
+   "vari",
+   "sipi",
+   "sipi3",
+   "savi",
+   "osavi",
+   "msavi",
+   "cvi",
+   "cig",
+   "reci",
+   "ndre",
+   "ndsi",
+   "ndwi",
+   "ndwi2",
+   "bai"
+   ],
+ "arvi_y": 0.16,
+ "ram": 512
 }
 ```
 #### Get the data
 
-A radar image is needed for the block to run. Such image can be
-obtained by creating a workflow with a single **Sentinel 1 L1C GRD**
-data block and download the the result.
+You need to get data samples to provide as input to to the block. To
+do that you can create a UP42 workflow consisting of any of the
+following data sources:
+
+ * [Pléiades 1A/1B reflectance](https://up42.com/marketplace/blocks/data/oneatlas-pleiades-fullscene) 
+ 
+ * [SPOT 6/7 reflectance](https://up42.com/marketplace/blocks/data/oneatlas-spot-fullscene)
+and
+ * [Sentinel-2A/Sentinel-2B analytic](https://up42.com/marketplace/blocks/data/esa-s2-l2a-gtiff-analytic) 
+ 
+For processing you need to add
+[pansharpening](https://up42.com/marketplace/blocks/processing/pansharpen).
+
+
+Here is the way a workflow looks like in the console if we choose
+Sentinel-2 as the data source.
+
+
+
 
 Then create the directory `/tmp/e2e_snap_polarimetric/`:
 
