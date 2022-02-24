@@ -175,46 +175,6 @@ make build UID=<UID> DOCKER_TAG=<docker tag>
 
 if you don't specify the docker tag, it gets the default value of `latest`.
 
-### Push the image to the UP42 registry
-
-You first need to login into the UP42 docker registry.
-
-```bash
-make login USER=me@example.com
-```
-
-where `me@example.com` should be replaced by your username, which is
-the email address you use for your  UP42 aacount.
-
-Now you can finally push the image to the UP42 docker registry:
-
-```bash
-make push UID=<UID>
-```
-
-where `<UID>` is user ID referenced above. Again using the copy &
-pasting on the clipboard.
-
-```bash
-# Mac OS X.
-make build UID=$(pbpaste | cut -f 2 -d '=')
-
-# Linux.
-make build UID=$(xsel --clipboard --output | cut -f 2 -d '=')
-```
-
-```bash
-make push UID=<UID>
-```
-Note that if you specified a custom docker tag when you built the image, you
-need to pass it now to `make`.
-
-```bash
-make push UID=<UID> DOCKER_TAG=<docker tag>
-```
-
-where `<UID>` is user ID referenced above. Again using the copy &
-pasting on the clipboard.
 
 ```bash
 # mac: OS X.
@@ -297,22 +257,25 @@ For processing you need to add
 [pansharpening](https://up42.com/marketplace/blocks/processing/pansharpen).
 
 
-Here is the way a workflow looks like in the console if we choose
+Here is the way a [workflow](https://docs.up42.com/getting-started/workflows/editor) looks like in the console if we choose
 Sentinel-2 as the data source.
 
+![workflow for Sentinel-2](_assets/s2_analytic_pansharpened_workflow.png)
 
+You can now proceed to select an Area Of Interest (AOI) in the [job configuration](https://docs.up42.com/getting-started/jobs/configuration).
 
-
-Then create the directory `/tmp/e2e_snap_polarimetric/`:
+After the job runs you can proceed to download the results and extract
+the archive (tarball) into a directory of your choosing. It is this
+directory that will be specified in the command line.
 
 ```bash
-mkdir /tmp/e2e_snap_polarimetric
+mkdir /path/to/sample_data
 ```
 
 Now untar the tarball with the result in that directory:
 
 ```bash
-tar -C /tmp/e2e_snap_polarimetric -zxvf <downloaded tarball>
+tar -C /path/to/sample_data -zxvf <downloaded tarball>
 ```
 #### Run the block
 
@@ -320,23 +283,49 @@ tar -C /tmp/e2e_snap_polarimetric -zxvf <downloaded tarball>
 make run
 ```
 
-If set a custom docker tag then the command ro run the block is:
+If set a custom docker tag then the command to run the block is:
 
 ```bash
 make run DOCKER_TAG=<docker tag>
 ```
 
-### Local development
+### Push the image to the UP42 registry
 
-#### Install the required programs
+You first need to login into the UP42 docker registry.
 
+```bash
+make login USER=me@example.com
+```
 
-Now you need to [build](#build-the-docker-images) and
-[run](#run-the-processing-block-locally) the block locally.
+where `me@example.com` should be replaced by your username, which is
+the email address you use for your  UP42 aacount.
 
-## Support
+Now you can finally push the image to the UP42 docker registry:
 
- 1. Open an issue here.
- 2. Reach out to us on
-      [gitter](https://gitter.im/up42-com/community).
- 3. Mail us [support@up42.com](mailto:support@up42.com).
+```bash
+make push UID=<UID>
+```
+
+where `<UID>` is user ID referenced above. Again using the copy &
+pasting on the clipboard.
+
+```bash
+# Mac OS X.
+make build UID=$(pbpaste | cut -f 2 -d '=')
+
+# Linux.
+make build UID=$(xsel --clipboard --output | cut -f 2 -d '=')
+```
+
+```bash
+make push UID=<UID>
+```
+Note that if you specified a custom docker tag when you built the image, you
+need to pass it now to `make`.
+
+```bash
+make push UID=<UID> DOCKER_TAG=<docker tag>
+```
+
+where `<UID>` is user ID referenced above. Again using the copy &
+pasting on the clipboard.
