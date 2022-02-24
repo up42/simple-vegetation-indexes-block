@@ -13,7 +13,7 @@ and [Sentinel-2](https://sentinel.esa.int/web/sentinel/missions/sentinel-2 "Sent
  * [GNDVI](https://www.indexdatabase.de/db/i-single.php?id=28) - Green
    Normalized Difference Vegetation Index
  * [WDRVI](https://www.indexdatabase.de/db/i-single.php?id=125) - Wide
-   Dynamic Range Vegetation Index 
+   Dynamic Range Vegetation Index
  * [EVI](https://en.wikipedia.org/wiki/Enhanced_vegetation_index) -
    Enhanced Vegetation Index
  * [EVI2](https://www.indexdatabase.de/db/si-single.php?sensor_id=96&rsindex_id=237) -
@@ -43,7 +43,7 @@ and [Sentinel-2](https://sentinel.esa.int/web/sentinel/missions/sentinel-2 "Sent
  * [MSAVI](https://www.indexdatabase.de/db/i-single.php?id=44) -
    Modified Soil Adjusted Vegetation Index
  * [NDSI](http://space4water.org/taxonomy/term/1247) - Normalized
-   Difference Snow Index 
+   Difference Snow Index
  * [NDWI/NDWI2](https://en.wikipedia.org/wiki/Normalized_difference_water_index) -
    Normalized Difference Water Index for water body detectiion (NDWI)
    and for drought and irrigation management (NDWI2)
@@ -108,7 +108,7 @@ The script accepts up to four **optional** commmand line arguments:
  * `-i`: The input directory. The path to the `data.json` file of the
    input imagery is.
  * `-o`: The output directory. The path to the `data.json` file of the
-   output imagery is. 
+   output imagery is.
  * `-t`: Path to the  `otbcli_BandMath` utility from OTB.
 
 If any of the optional arguments are not given the script uses
@@ -203,7 +203,7 @@ file like this:
 where:
 
  + `<indexes>`: JS array of possible vegataion indexes,
- + `<arvi_y>`: value of y coefficient for computing ARVI. 
+ + `<arvi_y>`: value of y coefficient for computing ARVI.
  + `<wdrvi_a>`: value of a coefficient for computing WDRVI.
  + `<RAM size in MB>`: the RAM size in MB made available to OTB.
 
@@ -243,12 +243,12 @@ You need to get data samples to provide as input to to the block. To
 do that you can create a UP42 workflow consisting of any of the
 following data sources:
 
- * [Pléiades 1A/1B reflectance](https://up42.com/marketplace/blocks/data/oneatlas-pleiades-fullscene) 
- 
+ * [Pléiades 1A/1B reflectance](https://up42.com/marketplace/blocks/data/oneatlas-pleiades-fullscene)
+
  * [SPOT 6/7 reflectance](https://up42.com/marketplace/blocks/data/oneatlas-spot-fullscene)
 and
- * [Sentinel-2A/Sentinel-2B analytic](https://up42.com/marketplace/blocks/data/esa-s2-l2a-gtiff-analytic) 
- 
+ * [Sentinel-2A/Sentinel-2B analytic](https://up42.com/marketplace/blocks/data/esa-s2-l2a-gtiff-analytic)
+
 For processing you need to add
 [pansharpening](https://up42.com/marketplace/blocks/processing/pansharpen).
 
@@ -290,7 +290,7 @@ mkdir /path/to/output_of_sample_data
 make run INPUT_DIR=/path/to/sample_data OUTPUT_DIR=/path/to/output_of_sample_data
 ```
 
-This [bind mounts](https://docs.docker.com/storage/bind-mounts/) 
+This [bind mounts](https://docs.docker.com/storage/bind-mounts/)
 input and output directories respectively to `/tmp/input` and
 `/tmp/output` inside the container. You can look ate the `config.mk`
 file for the options passed to `docker run`.
@@ -394,7 +394,7 @@ And a complete workflow using the block.
 
 ### Going further: local development
 
-If you intend to modify the code the Makefile provides some useful
+If you intend to modify the code, the Makefile provides some useful
 commands.
 
 To clean all dangling container images do:
@@ -428,6 +428,6 @@ make build-clean UID=<UID> DOCKER_TAG=<docker tag>
 ```
 
 ### Support
-  
+
  1. Open an issue here.
  2. Mail us [support@up42.com](mailto:support@up42.com).
