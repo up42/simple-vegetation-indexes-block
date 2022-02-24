@@ -145,10 +145,6 @@ of the form:
 
 where your `UID` is also the workspace ID.
 
-```bash
-docker push registry.up42.com/<UID>/<image_name>:<tag>
-```
-
 Now you can launch the image building using `make` like this:
 
 ```bash
@@ -262,7 +258,12 @@ Sentinel-2 as the data source.
 
 ![workflow for Sentinel-2](_assets/s2_analytic_pansharpened_workflow.png)
 
-You can now proceed to select an Area Of Interest (AOI) in the [job configuration](https://docs.up42.com/getting-started/jobs/configuration).
+You can now proceed to select an Area Of Interest (AOI) and block
+parameters in the [job configuration](https://docs.up42.com/getting-started/jobs/configuration).
+
+You can also use the example job parameters given in the
+`shell/examples/job-params` directory. Just copy & paste to the job
+configuration editor text area.
 
 After the job runs you can proceed to download the results and extract
 the archive (tarball) into a directory of your choosing. It is this
@@ -272,21 +273,58 @@ directory that will be specified in the command line.
 mkdir /path/to/sample_data
 ```
 
-Now untar the tarball with the result in that directory:
+Now untar the tarball with the results in that directory:
 
 ```bash
 tar -C /path/to/sample_data -zxvf <downloaded tarball>
 ```
+You also need to define an output directory. For example:
+
+```bash
+mkdir /path/to/output_of_sample_data
+```
+
 #### Run the block
 
 ```bash
-make run
+make run INPUT_DIR=/path/to/sample_data OUTPUT_DIR=/path/to/output_of_sample_data
 ```
 
-If set a custom docker tag then the command to run the block is:
+This [bind mounts](https://docs.docker.com/storage/bind-mounts/) 
+input and output directories respectively to `/tmp/input` and
+`/tmp/output` inside the container. You can look ate the `config.mk`
+file for the options passed to `docker run`.
+
+If you set a custom docker tag then the command to run the block is:
 
 ```bash
-make run DOCKER_TAG=<docker tag>
+make run INPUT_DIR=/path/to/sample_data OUTPUT_DIR=/path/to/output_of_sample_data DOCKER_TAG=<docker tag>
+```
+
+If you are satisfied with the results obtained locally then you can
+proceed to push the block to UP42 so that you can use it as a custom
+block in your workflows.
+
+### Before pushing: validate the manifest
+
+Before pushing the block you must validate the manifest. You will
+always be able to push the block even if the manifest is invalid,
+but in that case you won't be able to use the block in any workflow.
+
+```bash
+make validate
+```
+
+For a valid manifest the response is:
+
+```json
+{
+  "data": {
+    "valid": true,
+    "errors": []
+  },
+  "error": null
+}
 ```
 
 ### Push the image to the UP42 registry
@@ -294,7 +332,7 @@ make run DOCKER_TAG=<docker tag>
 You first need to login into the UP42 docker registry.
 
 ```bash
-make login USER=me@example.com
+make login USERNAME=me@example.com
 ```
 
 where `me@example.com` should be replaced by your username, which is
@@ -311,10 +349,10 @@ pasting on the clipboard.
 
 ```bash
 # Mac OS X.
-make build UID=$(pbpaste | cut -f 2 -d '=')
+make push UID=$(pbpaste | cut -f 2 -d '=')
 
 # Linux.
-make build UID=$(xsel --clipboard --output | cut -f 2 -d '=')
+make push UID=$(xsel --clipboard --output | cut -f 2 -d '=')
 ```
 
 ```bash
@@ -329,3 +367,67 @@ make push UID=<UID> DOCKER_TAG=<docker tag>
 
 where `<UID>` is user ID referenced above. Again using the copy &
 pasting on the clipboard.
+
+```bash
+# Mac OS X.
+make push UID=$(pbpaste | cut -f 2 -d '=') DOCKER_TAG=<docker tag>
+
+# Linux.
+make push UID=$(xsel --clipboard --output | cut -f 2 -d '=') DOCKER_TAG=<docker tag>
+```
+
+### Using the block in workflows
+
+Once the block is pushed is should show up as a custom block in the
+console.
+
+![custom block in console](./_assets/simple_vegetation_indexes_custom_block_console.png)
+
+You can now add it to a workflow.
+
+![adding custom block in workflow](./_assets/simple_vegetation_indexes_custom_block_workflow.png)
+
+And a complete workflow using the block.
+
+![custom block in complete workflow](./_assets/s2_complete_simple_vegetation_indexes_custom_block_workflow.png)
+
+
+### Going further: local development
+
+If you intend to modify the code the Makefile provides some useful
+commands.
+
+To clean all dangling container images do:
+
+```bash
+make clean
+```
+
+To build a container image **without** relying on the build cache do:
+
+```bash
+make build-clean UID=<UID>
+```
+You can avoid selecting the exact UID by using `pbpaste` in a Mac (OS
+X) or `xsel --clipboard --output` in Linux and do:
+
+```bash
+# Mac OS X.
+make build-clean UID=$(pbpaste | cut -f 2 -d '=')
+
+# Linux.
+make build-clean UID=$(xsel --clipboard --output | cut -f 2 -d '=')
+```
+
+If you set a custom tag for your image (default tag
+is `simple-vegetation-indexes:latest`):
+
+```bash
+make build-clean UID=<UID> DOCKER_TAG=<docker tag>
+
+```
+
+### Support
+  
+ 1. Open an issue here.
+ 2. Mail us [support@up42.com](mailto:support@up42.com).

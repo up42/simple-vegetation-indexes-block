@@ -21,7 +21,7 @@ else
 endif
 
 validate: $(MANIFEST_JSON)
-	$(CURL) -X POST -H 'Content-Type: application/json' -d @$^ $(VALIDATE_ENDPOINT)
+	$(CURL) -s -X POST -H 'Content-Type: application/json' -d @$^ $(VALIDATE_ENDPOINT)
 
 push:
 	$(DOCKER) push $(REGISTRY)/$(UID)/$(DOCKER_TAG)
@@ -40,4 +40,4 @@ run-oa: $(JOB_CONFIG_OA) build
 clean:
 	$(DOCKER) system prune -f
 
-.PHONY: build login push test install run run-oa run-s2 clean
+.PHONY: build login push test install run run-oa run-s2 clean clean-build
