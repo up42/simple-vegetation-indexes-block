@@ -1,0 +1,70 @@
+{
+  "pansharpen:1": {
+    "bbox": null,
+    "method": "SFIM",
+    "contains": null,
+    "intersects": null,
+    "clip_to_aoi": false,
+    "include_pan": false
+  },
+  "esa-s2-l2a-gtiff-analytic:1": {
+    "ids": null,
+    "time": "2018-12-01T00:00:00+00:00/2021-12-31T23:59:59+00:00",
+    "limit": 3,
+    "contains": {
+      "type": "Polygon",
+      "coordinates": [
+        [
+          [
+            -68.18793296813965,
+            49.22707094250192
+          ],
+          [
+            -68.17368507385254,
+            49.222698627883325
+          ],
+          [
+            -68.16836357116699,
+            49.227351205885064
+          ],
+          [
+            -68.17926406860352,
+            49.22903275279931
+          ],
+          [
+            -68.18793296813965,
+            49.22707094250192
+          ]
+        ]
+      ]
+    },
+    "max_cloud_cover": 10
+  },
+  "simple-vegetation-indexes:1": {
+    "ram": 512,
+    "arvi_y": 0.16,
+    "indexes": [
+      "ndvi",
+      "gndvi",
+      "evi",
+      "evi2",
+      "evi22",
+      "arvi",
+      "vari",
+      "sipi",
+      "sipi3",
+      "savi",
+      "osavi",
+      "msavi",
+      "cvi",
+      "cig",
+      "reci",
+      "ndre",
+      "ndsi",
+      "ndwi",
+      "ndwi2",
+      "bai"
+    ],
+    "wdrvi_a": 0.1
+  }
+}
