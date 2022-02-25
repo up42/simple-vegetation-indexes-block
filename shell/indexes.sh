@@ -219,7 +219,7 @@ function compute_evi() {
             ;;
         sentinel-2)
             do_band_math "$(get_data_path "$1")" \
-                         "2.5*(im1b8 - im1b4)/(im1b8 + 6.4*im1b4 -7.5*im1b2+ $SCALING_FACTOR)" "evi"
+                         "2.5*(im1b8 - im1b4)/(im1b8 + 6.4*im1b4 -7.5*im1b2 + $SCALING_FACTOR)" "evi"
             ;;
         *)
             echo "$SCRIPTNAME: Cannot compute EVI for constellation $constellation."
@@ -323,11 +323,11 @@ function compute_savi() {
     case $constellation in
         spot|phr)
             do_band_math "$(get_data_path "$1")" \
-                         "1.5*(im1b4-im1b1)/(im1b4+im1b1+0.5*$SCALING_FACTOR)" "savi"
+                         "1.5*(im1b4- im1b1)/(im1b4 + im1b1 + 0.5*$SCALING_FACTOR)" "savi"
             ;;
         sentinel-2)
             do_band_math "$(get_data_path "$1")" \
-                         "1.5*(im1b8-im1b4)/(im1b8+im1b4+0.5*$SCALING_FACTOR)" "savi"
+                         "1.5*(im1b8 - im1b4)/(im1b8 + im1b4 + 0.5*$SCALING_FACTOR)" "savi"
             ;;
         *)
             echo "$SCRIPTNAME: Cannot compute SAVI for constellation $constellation."
@@ -587,7 +587,7 @@ function compute_bai() {
             ;;
         sentinel-2)
             do_band_math "$(get_data_path "$1")" \
-                         "2^32/((0.1 *$SCALING_FACTOR- im1b4)^2 + (0.06* $SCALING_FACTOR - im1b8)^2)" "bai"
+                         "2^32/((0.1*$SCALING_FACTOR - im1b4)^2 + (0.06*$SCALING_FACTOR - im1b8)^2)" "bai"
             ;;
         *)
             echo "$SCRIPTNAME: Cannot compute BAI for constellation $constellation."
