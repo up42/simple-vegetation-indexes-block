@@ -71,8 +71,11 @@ for handling large datasets effectively.
 
 ### Inputs & outputs
 
-This block takes as input a set of Level 2A Sentinel-2 images, a
-Pléiades or SPOT 6/7 reflectance products for analysis.
+This block takes as input a set of either:
+
+ * Level 2A Sentinel-2 analytic images.
+
+ * Pléiades or SPOT 6/7 reflectance products for analysis.
 
 The output is a set [GeoTIFF](https://en.wikipedia.org/wiki/GeoTIFF) files.
 
