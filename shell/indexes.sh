@@ -113,9 +113,12 @@ function create_data_json() {
     cp "$1" "$OUTPUT_DIR"
 }
 
-## Scaling factor for 2 byte integers that represent
-## reflectance. Nominally reflectance is a value between 0 and 1.
-SCALING_FACTOR=$((2**16 - 1))
+## Scaling factor for Sentinel-2. Also used for Pléaides/SPOT. Only
+## images that are DN are packaged as 12 bit/pixel JPEG2000 files. In
+## both cases this scaling happens at the L2A processing level. For
+## Pléaides/SPOT the terminology used is Reflectance. But that is
+## "equivalent" to L2A for Sentinel-2.
+SCALING_FACTOR=$((10**4))
 
 ## Does the band math calculations for a given formula.
 ## $1: input data files.
