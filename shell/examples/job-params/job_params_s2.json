@@ -44,7 +44,7 @@
     "indexes": [
       "ndvi",
       "gndvi",
-      "wrdvi",
+      "wdrvi",
       "evi",
       "evi2",
       "evi22",
@@ -62,9 +62,10 @@
       "ndsi",
       "ndwi",
       "ndwi2",
-      "bai"
+      "bai",
+      "nbr"
     ],
-    "arvi_y": 0.16,
+    "arvi_y": 0.106,
     "wdrvi_a": 0.1,
     "ram": 512
   }

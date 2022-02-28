@@ -623,10 +623,10 @@ function compute_nbr() {
 function dispatch_operation() {
     ## Perform the requested operation.
     case "$1" in
-        "arvi")
+        arvi)
             compute_arvi "$DATA_JSON" "OUTPUT_DIR" "$ARVI_COEFF"
             ;;
-        "wdrvi")
+        wdrvi)
             compute_wdrvi "$DATA_JSON" "OUTPUT_DIR" "$WDRVI_COEFF"
             ;;
         ndvi|gndvi|evi|evi2|evi22|vari|savi|osavi|msavi|sipi|sipi3|cvi|cig|reci|ndre|ndsi|ndwi|ndwi2|bai|nbr)
