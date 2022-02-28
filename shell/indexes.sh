@@ -583,11 +583,11 @@ function compute_bai() {
     case $constellation in
         spot|phr)
             do_band_math "$(get_data_path "$1")" \
-                         "2^32/((0.1*$SCALING_FACTOR - im1b1)^2 + (0.06*$SCALING_FACTOR - im1b4)^2)" "bai"
+                         "$SCALING_FACTOR^2 / ((0.1*$SCALING_FACTOR - im1b1)^2 + (0.06*$SCALING_FACTOR - im1b4)^2)" "bai"
             ;;
         sentinel-2)
             do_band_math "$(get_data_path "$1")" \
-                         "2^32/((0.1*$SCALING_FACTOR - im1b4)^2 + (0.06*$SCALING_FACTOR - im1b8)^2)" "bai"
+                         "$SCALING_FACTOR^2 / ((0.1*$SCALING_FACTOR - im1b4)^2 + (0.06*$SCALING_FACTOR - im1b8)^2)" "bai"
             ;;
         *)
             echo "$SCRIPTNAME: Cannot compute BAI for constellation $constellation."
