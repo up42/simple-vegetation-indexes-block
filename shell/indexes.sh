@@ -587,7 +587,7 @@ function compute_bai() {
             ;;
         sentinel-2)
             do_band_math "$(get_data_path "$1")" \
-                         "1/ ((0.1c- im1b4/$SCALING_FACTOR)^2 + (0.06 - im1b8/$SCALING_FACTOR)^2)" "bai"
+                         "1/((0.1c- im1b4/$SCALING_FACTOR)^2 + (0.06 - im1b8/$SCALING_FACTOR)^2)" "bai"
             ;;
         *)
             echo "$SCRIPTNAME: Cannot compute BAI for constellation $constellation."
