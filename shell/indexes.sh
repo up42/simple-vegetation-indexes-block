@@ -243,7 +243,7 @@ function compute_evi2() {
                          "2.5*(im1b8 - im1b4)/(im1b8 + 2.4*im1b4 + $SCALING_FACTOR)" "evi2"
             ;;
         *)
-            echo "$SCRIPTNAME: Cannot compute EVI for constellation $constellation."
+            echo "$SCRIPTNAME: Cannot compute EVI 2 for constellation $constellation."
             exit 81
     esac
 }
@@ -264,7 +264,7 @@ function compute_evi22() {
                          "2.5*(im1b8 - im1b4)/(im1b8 + im1b4 + $SCALING_FACTOR)" "evi22"
             ;;
         *)
-            echo "$SCRIPTNAME: Cannot compute EVI for constellation $constellation."
+            echo "$SCRIPTNAME: Cannot compute EVI 2-2 for constellation $constellation."
             exit 82
     esac
 }
@@ -288,7 +288,7 @@ function compute_arvi() {
                          "(im1b9 + ${3} * im1b2 - (1 + ${3}) * im1b4)/(im1b9 + (1 - ${3}) * im1b4 + ${3} * im1b2)" "arvi"
             ;;
         *)
-            echo "$SCRIPTNAME: Cannot compute EVI for constellation $constellation."
+            echo "$SCRIPTNAME: Cannot compute ARVI for constellation $constellation."
             exit 83
     esac
 }
