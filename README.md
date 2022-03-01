@@ -135,7 +135,7 @@ where `<directory>` is the directory where the cloning is done.
 
 For building the images you should tag the image such that it can be
 pushed to the UP42 docker registry, enabling you to run it as a custom
-block. For that you need to pass your UP42 user ID (UID) in the `make`
+block. For that you need to pass your UP42 user ID (UP42UID) in the `make`
 command.
 
 The quickest way to get that is just to go into the UP42 console and
@@ -144,32 +144,32 @@ copy & paste from the last clipboard that you get at the
 clicking on **PUSH a BLOCK to THE PLATFORM**. For example, it will be
 of the form:
 
-    https://console.up42.com/custom-blocks?workspace=<UID>
+    https://console.up42.com/custom-blocks?workspace=<UP42UID>
 
-where your `UID` is also the workspace ID.
+where your `UP42UID` is also the workspace ID.
 
 Now you can launch the image building using `make` like this:
 
 ```bash
-make build UID=<UID>
+make build UP42UID=<UP42UID>
 ```
 
-You can avoid selecting the exact UID by using `pbpaste` in a Mac (OS
+You can avoid selecting the exact UP42UID by using `pbpaste` in a Mac (OS
 X) or `xsel --clipboard --output` in Linux and do:
 
 ```bash
 # Mac OS X.
-make build UID=$(pbpaste | cut -f 2 -d '=')
+make build UP42UID=$(pbpaste | cut -f 2 -d '=')
 
 # Linux.
-make build UID=$(xsel --clipboard --output | cut -f 2 -d '=')
+make build UP42UID=$(xsel --clipboard --output | cut -f 2 -d '=')
 ```
 
 You can additionaly specifiy a custom tag for your image (default tag
 is `simple-vegetation-indexes:latest`):
 
 ```bash
-make build UID=<UID> DOCKER_TAG=<docker tag>
+make build UP42UID=<UP42UID> DOCKER_TAG=<docker tag>
 ```
 
 if you don't specify the docker tag, it gets the default value of `latest`.
@@ -177,10 +177,10 @@ if you don't specify the docker tag, it gets the default value of `latest`.
 
 ```bash
 # mac: OS X.
-make build UID=$(pbpaste | cut -f 2 -d '=') DOCKER_TAG=<docker tag>
+make build UP42UID=$(pbpaste | cut -f 2 -d '=') DOCKER_TAG=<docker tag>
 
 # Linux.
-make build UID=$(xsel --clipboard --output | cut -f 2 -d '=') DOCKER_TAG=<docker tag>
+make build UP42UID=$(xsel --clipboard --output | cut -f 2 -d '=') DOCKER_TAG=<docker tag>
 ```
 
 After the image is pushed you should be able to see your custom block
@@ -344,39 +344,39 @@ the email address you use for your  UP42 aacount.
 Now you can finally push the image to the UP42 docker registry:
 
 ```bash
-make push UID=<UID>
+make push UP42UID=<UP42UID>
 ```
 
-where `<UID>` is user ID referenced above. Again using the copy &
+where `<UP42UID>` is user ID referenced above. Again using the copy &
 pasting on the clipboard.
 
 ```bash
 # Mac OS X.
-make push UID=$(pbpaste | cut -f 2 -d '=')
+make push UP42UID=$(pbpaste | cut -f 2 -d '=')
 
 # Linux.
-make push UID=$(xsel --clipboard --output | cut -f 2 -d '=')
+make push UP42UID=$(xsel --clipboard --output | cut -f 2 -d '=')
 ```
 
 ```bash
-make push UID=<UID>
+make push UP42UID=<UP42UID>
 ```
 Note that if you specified a custom docker tag when you built the image, you
 need to pass it now to `make`.
 
 ```bash
-make push UID=<UID> DOCKER_TAG=<docker tag>
+make push UP42UID=<UP42UID> DOCKER_TAG=<docker tag>
 ```
 
-where `<UID>` is user ID referenced above. Again using the copy &
+where `<UP42UID>` is user ID referenced above. Again using the copy &
 pasting on the clipboard.
 
 ```bash
 # Mac OS X.
-make push UID=$(pbpaste | cut -f 2 -d '=') DOCKER_TAG=<docker tag>
+make push UP42UID=$(pbpaste | cut -f 2 -d '=') DOCKER_TAG=<docker tag>
 
 # Linux.
-make push UID=$(xsel --clipboard --output | cut -f 2 -d '=') DOCKER_TAG=<docker tag>
+make push UP42UID=$(xsel --clipboard --output | cut -f 2 -d '=') DOCKER_TAG=<docker tag>
 ```
 
 ### Using the block in workflows
@@ -409,24 +409,24 @@ make clean
 To build a container image **without** relying on the build cache do:
 
 ```bash
-make build-clean UID=<UID>
+make build-clean UP42UID=<UP42UID>
 ```
-You can avoid selecting the exact UID by using `pbpaste` in a Mac (OS
+You can avoid selecting the exact UP42UID by using `pbpaste` in a Mac (OS
 X) or `xsel --clipboard --output` in Linux and do:
 
 ```bash
 # Mac OS X.
-make build-clean UID=$(pbpaste | cut -f 2 -d '=')
+make build-clean UP42UID=$(pbpaste | cut -f 2 -d '=')
 
 # Linux.
-make build-clean UID=$(xsel --clipboard --output | cut -f 2 -d '=')
+make build-clean UP42UID=$(xsel --clipboard --output | cut -f 2 -d '=')
 ```
 
 If you set a custom tag for your image (default tag
 is `simple-vegetation-indexes:latest`):
 
 ```bash
-make build-clean UID=<UID> DOCKER_TAG=<docker tag>
+make build-clean UP42UID=<UP42UID> DOCKER_TAG=<docker tag>
 
 ```
 

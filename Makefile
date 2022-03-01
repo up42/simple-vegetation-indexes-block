@@ -7,15 +7,15 @@ CURL := curl
 DOCKER := docker
 
 build: $(MANIFEST_JSON)
-ifdef UID
-	$(DOCKER) build --build-arg manifest="$$(cat $<)" -f $(UP42_DOCKERFILE) -t $(REGISTRY)/$(UID)/$(DOCKER_TAG) .
+ifdef UP42UID
+	$(DOCKER) build --build-arg manifest="$$(cat $<)" -f $(UP42_DOCKERFILE) -t $(REGISTRY)/$(UP42UID)/$(DOCKER_TAG) .
 else
 	$(DOCKER) build --build-arg manifest="$$(cat $<)" -f $(UP42_DOCKERFILE) -t $(DOCKER_TAG) .
 endif
 
 clean-build: $(MANIFEST_JSON)
-ifdef UID
-	$(DOCKER) build --pull --no-cache --build-arg manifest="$$(cat $<)" -f $(UP42_DOCKERFILE) -t $(REGISTRY)/$(UID)/$(DOCKER_TAG) .
+ifdef UP42UID
+	$(DOCKER) build --pull --no-cache --build-arg manifest="$$(cat $<)" -f $(UP42_DOCKERFILE) -t $(REGISTRY)/$(UP42UID)/$(DOCKER_TAG) .
 else
 	$(DOCKER) build --pull --no-cache --build-arg manifest="$$(cat $<)" -f $(UP42_DOCKERFILE) -t $(DOCKER_TAG) .
 endif
@@ -24,7 +24,7 @@ validate: $(MANIFEST_JSON)
 	$(CURL) -s -X POST -H 'Content-Type: application/json' -d @$^ $(VALIDATE_ENDPOINT)
 
 push:
-	$(DOCKER) push $(REGISTRY)/$(UID)/$(DOCKER_TAG)
+	$(DOCKER) push $(REGISTRY)/$(UP42UID)/$(DOCKER_TAG)
 
 login:
 	$(DOCKER) login -u $(USERNAME) https://$(REGISTRY)
