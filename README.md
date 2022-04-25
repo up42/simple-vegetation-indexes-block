@@ -69,6 +69,9 @@ interface.
 Performance wise OTB offers [Streaming and Threading](https://www.orfeo-toolbox.org/CookBook/C++/StreamingAndThreading.html)
 for handling large datasets effectively.
 
+A comprehensive description of building a custom block using this code
+is on [UP42 blog](https://up42.com/blog/tech/create-your-first-custom-block-computing-vegetation-indexes).
+
 ### Inputs & outputs
 
 This block takes as input a set of either:
